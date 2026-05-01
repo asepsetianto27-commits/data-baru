@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { CheckCircleIcon, ClockIcon, XCircleIcon } from "@/components/ui/icons";
 import type { LeaveStatus } from "@prisma/client";
 import { formatDateTime } from "@/lib/utils";
 
@@ -45,9 +46,11 @@ export function ReviewActions({ id, status, catatanAdmin, reviewedAt, reviewedBy
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       {reviewedAt && (
-        <div className="rounded-md border border-slate-200 bg-slate-50 p-3 text-xs text-slate-600">
+        <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs leading-relaxed text-slate-600">
+          <span className="font-medium text-slate-800">Riwayat tinjauan</span>
+          <br />
           Ditinjau {reviewedBy ? `oleh ${reviewedBy} ` : ""}pada {formatDateTime(reviewedAt)}.
         </div>
       )}
@@ -64,33 +67,39 @@ export function ReviewActions({ id, status, catatanAdmin, reviewedAt, reviewedBy
       </div>
 
       {error && (
-        <p className="rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-800">
+        <p className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-800">
           {error}
         </p>
       )}
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-col gap-2">
         <Button
           variant="success"
           disabled={loading !== null}
           onClick={() => act("approve")}
+          className="w-full"
         >
-          {loading === "approve" ? "Memproses..." : "Setujui"}
+          <CheckCircleIcon size={16} />
+          {loading === "approve" ? "Memproses..." : "Setujui Pengajuan"}
         </Button>
         <Button
           variant="destructive"
           disabled={loading !== null}
           onClick={() => act("reject")}
+          className="w-full"
         >
-          {loading === "reject" ? "Memproses..." : "Tolak"}
+          <XCircleIcon size={16} />
+          {loading === "reject" ? "Memproses..." : "Tolak Pengajuan"}
         </Button>
         {status !== "PENDING" && (
           <Button
             variant="outline"
             disabled={loading !== null}
             onClick={() => act("reset")}
+            className="w-full"
           >
-            {loading === "reset" ? "Memproses..." : "Set Pending"}
+            <ClockIcon size={16} />
+            {loading === "reset" ? "Memproses..." : "Set Kembali ke Pending"}
           </Button>
         )}
       </div>

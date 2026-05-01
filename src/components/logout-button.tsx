@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { LogoutIcon } from "@/components/ui/icons";
 
 export function LogoutButton() {
   const router = useRouter();
@@ -12,6 +13,7 @@ export function LogoutButton() {
   }
   return (
     <Button variant="outline" size="sm" onClick={logout}>
+      <LogoutIcon size={14} />
       Logout
     </Button>
   );

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { CheckCircleIcon, XCircleIcon } from "@/components/ui/icons";
 
 export function ChangePasswordForm() {
   const [current, setCurrent] = useState("");
@@ -47,7 +48,7 @@ export function ChangePasswordForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="max-w-md space-y-4">
+    <form onSubmit={onSubmit} className="grid max-w-xl gap-4">
       <div className="space-y-1.5">
         <Label htmlFor="current">Password Saat Ini</Label>
         <Input
@@ -59,44 +60,55 @@ export function ChangePasswordForm() {
           required
         />
       </div>
-      <div className="space-y-1.5">
-        <Label htmlFor="new">Password Baru</Label>
-        <Input
-          id="new"
-          type="password"
-          autoComplete="new-password"
-          value={next}
-          onChange={(e) => setNext(e.target.value)}
-          required
-          minLength={6}
-        />
-      </div>
-      <div className="space-y-1.5">
-        <Label htmlFor="confirm">Konfirmasi Password Baru</Label>
-        <Input
-          id="confirm"
-          type="password"
-          autoComplete="new-password"
-          value={confirm}
-          onChange={(e) => setConfirm(e.target.value)}
-          required
-          minLength={6}
-        />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-1.5">
+          <Label htmlFor="new">Password Baru</Label>
+          <Input
+            id="new"
+            type="password"
+            autoComplete="new-password"
+            value={next}
+            onChange={(e) => setNext(e.target.value)}
+            required
+            minLength={6}
+            placeholder="Minimal 6 karakter"
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="confirm">Konfirmasi Password Baru</Label>
+          <Input
+            id="confirm"
+            type="password"
+            autoComplete="new-password"
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+            required
+            minLength={6}
+            placeholder="Ulangi password baru"
+          />
+        </div>
       </div>
       {msg && (
         <p
-          className={`rounded-md border px-3 py-2 text-sm ${
+          className={`flex items-start gap-2 rounded-lg border px-3 py-2 text-sm ${
             msg.kind === "ok"
               ? "border-emerald-200 bg-emerald-50 text-emerald-800"
               : "border-rose-200 bg-rose-50 text-rose-800"
           }`}
         >
-          {msg.text}
+          {msg.kind === "ok" ? (
+            <CheckCircleIcon size={16} className="mt-0.5 shrink-0" />
+          ) : (
+            <XCircleIcon size={16} className="mt-0.5 shrink-0" />
+          )}
+          <span>{msg.text}</span>
         </p>
       )}
-      <Button type="submit" disabled={loading}>
-        {loading ? "Memproses..." : "Simpan Password Baru"}
-      </Button>
+      <div>
+        <Button type="submit" disabled={loading}>
+          {loading ? "Memproses..." : "Simpan Password Baru"}
+        </Button>
+      </div>
     </form>
   );
 }

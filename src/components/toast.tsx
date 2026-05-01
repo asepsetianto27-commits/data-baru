@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { CheckCircleIcon, XCircleIcon } from "@/components/ui/icons";
 
 type ToastVariant = "default" | "success" | "error";
 
@@ -38,19 +39,42 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
     <ToastContext.Provider value={{ show }}>
       {children}
-      <div className="fixed bottom-4 right-4 z-50 flex w-full max-w-sm flex-col gap-2">
+      <div
+        aria-live="polite"
+        className="pointer-events-none fixed bottom-4 right-4 z-50 flex w-full max-w-sm flex-col gap-2"
+      >
         {toasts.map((t) => (
           <div
             key={t.id}
             className={cn(
-              "rounded-lg border p-4 shadow-md",
-              t.variant === "success" && "border-emerald-200 bg-emerald-50 text-emerald-900",
-              t.variant === "error" && "border-rose-200 bg-rose-50 text-rose-900",
-              t.variant === "default" && "border-slate-200 bg-white text-slate-900",
+              "pointer-events-auto flex items-start gap-3 rounded-xl border bg-white p-3.5 shadow-card backdrop-blur",
+              t.variant === "success" && "border-emerald-200",
+              t.variant === "error" && "border-rose-200",
+              t.variant === "default" && "border-slate-200",
             )}
           >
-            <p className="text-sm font-semibold">{t.title}</p>
-            {t.description && <p className="mt-1 text-sm">{t.description}</p>}
+            <div
+              className={cn(
+                "mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full",
+                t.variant === "success" && "bg-emerald-100 text-emerald-700",
+                t.variant === "error" && "bg-rose-100 text-rose-700",
+                t.variant === "default" && "bg-slate-100 text-slate-700",
+              )}
+            >
+              {t.variant === "error" ? (
+                <XCircleIcon size={16} />
+              ) : (
+                <CheckCircleIcon size={16} />
+              )}
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-slate-900">{t.title}</p>
+              {t.description && (
+                <p className="mt-0.5 text-xs leading-relaxed text-slate-600">
+                  {t.description}
+                </p>
+              )}
+            </div>
           </div>
         ))}
       </div>

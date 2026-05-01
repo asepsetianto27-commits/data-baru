@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ArrowRightIcon, XCircleIcon } from "@/components/ui/icons";
 
 export function LoginForm() {
   const router = useRouter();
@@ -50,6 +51,7 @@ export function LoginForm() {
           autoComplete="username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          placeholder="cth. admin"
           required
         />
       </div>
@@ -62,16 +64,19 @@ export function LoginForm() {
           autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          placeholder="••••••••"
           required
         />
       </div>
       {error && (
-        <p className="rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-800">
-          {error}
+        <p className="flex items-start gap-2 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-800">
+          <XCircleIcon size={16} className="mt-0.5 shrink-0" />
+          <span>{error}</span>
         </p>
       )}
-      <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? "Memproses..." : "Masuk"}
+      <Button type="submit" className="w-full" size="lg" disabled={loading}>
+        {loading ? "Memproses..." : "Masuk ke Panel Admin"}
+        {!loading && <ArrowRightIcon size={16} />}
       </Button>
     </form>
   );
