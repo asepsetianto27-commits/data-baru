@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum LeaveType {
+  TAHUNAN
+  SAKIT
+  MELAHIRKAN
+  PENTING
+  TANPA_GAJI
+  LAINNYA
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model LeaveRequest {
+  id              String         @id @default(cuid())
+  nama            String
+  nip             String
+  departemen      String
+  jenisCuti       LeaveType
+  tanggalMulai    DateTime
+  tanggalSelesai  DateTime
+  jumlahHari      Int
+  alasan          String         @db.Text
+  status          LeaveStatus    @default(PENDING)
+  catatanAdmin    String?        @db.Text
+  reviewedAt      DateTime?
+  reviewedBy      String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  attachments     LeaveAttachment[]
+
+  @@index([status])
+  @@index([createdAt])
+  @@index([tanggalMulai])
+}
+
+model LeaveAttachment {
+  id              String       @id @default(cuid())
+  leaveRequestId  String
+  leaveRequest    LeaveRequest @relation(fields: [leaveRequestId], references: [id], onDelete: Cascade)
+  fileName        String
+  fileType        String
+  fileSize        Int
+  storageKind     String       // "blob" | "local"
+  storagePath     String       // URL (blob) or relative path (local)
+  uploadedAt      DateTime     @default(now())
+
+  @@index([leaveRequestId])
+}
